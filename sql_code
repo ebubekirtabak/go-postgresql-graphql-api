@@ -1,0 +1,7 @@
+ CREATE TABLE citizen (
+  id SERIAL PRIMARY KEY,
+  name TEXT,
+  email TEXT,
+  age INT,
+  weight Double precision
+);
