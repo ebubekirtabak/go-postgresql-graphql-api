@@ -1,27 +1,25 @@
 package database
 
 import (
-	"database/sql"
+	_ "github.com/lib/pq"
 	"fmt"
 	"log"
-
-	_ "github.com/lib/pq"
+	"database/sql"
 )
+
 
 const (
 	DATABASE_HOST      = "localhost"
 	DATABASE_PORT      = 5432
-	DATABASE_NAME      = "people"
+	DATABASE_NAME      = "tutorials"
 	DATABASE_USER_NAME = "ebubekirtabak"
 	DATABASE_PASSWORD  = ""
-	CITIZEN_TABLE_NAME = "citizen"
 )
 
 func OpenDatabase() *sql.DB {
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		DATABASE_HOST, DATABASE_PORT, DATABASE_USER_NAME, DATABASE_PASSWORD, DATABASE_NAME)
+	psqlInfo := fmt.Sprintf("user=%s dbname=%s sslmode=disable",
+		 DATABASE_USER_NAME, DATABASE_NAME)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal(err)
@@ -30,13 +28,15 @@ func OpenDatabase() *sql.DB {
 	return db
 }
 
-func TestDatabase() {
-	db := OpenDatabase()
 
+func TestDatabase() {
+
+	db := OpenDatabase()
 	err := db.Ping()
 	if err != nil {
 		panic(err)
 	}
+
 	defer db.Close()
 	fmt.Println("Successfully connected!")
 }
