@@ -252,5 +252,128 @@ func fetchCommentsByPostID(id int) ([]Comment, error) {
 }
 ```
 
+## Create Query Type 
+
+##### __main.go__
 
 
+```
+func createQueryType(postType *graphql.Object) graphql.ObjectConfig {
+	return graphql.ObjectConfig{Name: "QueryType", Fields: graphql.Fields{
+		"post": &graphql.Field{
+			Type: postType,
+			Args: graphql.FieldConfigArgument {
+				"id": &graphql.ArgumentConfig {
+					Type: graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				id := p.Args["id"]
+				v, _ := id.(int)
+				log.Printf("fetching post with id: %d", v)
+				return types.FetchPostByiD(v)
+			},
+		},
+	}}
+}
+
+```
+
+###### Call Types
+
+```
+
+func createPostType(commentType *graphql.Object) *graphql.Object {
+	return types.CreatePostType(commentType)
+}
+
+func createCommentType() *graphql.Object {
+	return types.CreateCommentType()
+}
+```
+
+## Run APi Server 
+
+##### __main.go__
+
+```
+func main() {
+	database.TestDatabase()
+	database.OpenDatabase()
+	schemaPost, err := graphql.NewSchema(graphql.SchemaConfig{
+		Query: graphql.NewObject(
+			createQueryType(
+					createPostType(
+					createCommentType(),
+				),
+			),
+
+		),
+	})
+
+	if err != nil {
+		log.Fatalf("failed to create schema, error: %v", err)
+	}
+
+	handlerPost := gqlhandler.New(&gqlhandler.Config {
+		Schema: &schemaPost,
+	})
+
+	http.Handle("/post", handlerPost)
+	log.Println("Server started at http://localhost:3001/post")
+	log.Fatal(http.ListenAndServe(":3001", nil))
+}
+```
+
+## Running 
+
+I tested with Insomnia App.
+
+Select Graphql Option.
+
+![graphql option](screenshots/insomia1.png "Select Graphql option")
+
+Add query schema.
+
+```
+query {
+post(id: 1) {
+	id
+	userId
+	title
+	body
+	comments{
+		id,
+		name,
+		body
+	}
+}
+}
+```
+
+##### Conclusion
+
+```
+{
+	"data": {
+		"post": {
+			"body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+			"comments": [
+				{
+					"body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+					"id": 3,
+					"name": "Elena Bishop"
+				},
+				{
+					"body": "Purus semper eget duis at tellus at. In est ante in nibh mauris cursus mattis molestie a.",
+					"id": 4,
+					"name": "Conor Patton"
+				}
+			],
+			"id": 1,
+			"title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+			"userId": 12
+		}
+	}
+}
+```
