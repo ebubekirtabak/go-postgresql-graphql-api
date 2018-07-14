@@ -8,7 +8,6 @@ import (
 )
 
 
-// Role type definition.
 type Post struct {
 	ID   	 int    `db:"id" json:"id"`
 	UserId   int    `db:"userid" json:"userId"`
