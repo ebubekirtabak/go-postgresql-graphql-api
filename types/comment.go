@@ -8,7 +8,6 @@ import (
 )
 
 
-// Role type definition.
 type Comment struct {
 	ID   	 int    `db:"id" json:"id"`
 	PostId   int    `db:"postId" json:"postId"`

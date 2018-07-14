@@ -1,3 +1,5 @@
+CREATE DATABASE tutorials;
+
 CREATE TABLE IF NOT EXISTS "post" (
   id SERIAL PRIMARY KEY,
   userId INT,
@@ -45,15 +47,4 @@ INSERT INTO comment (postId, name, email, body)
 VALUES (1, 'Elena Bishop', 'wdiaz353@zaidyelsew.org','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 INSERT INTO comment (postId, name, email, body)
 VALUES (1, 'Conor Patton', 'mnorton444@notronaryam.com','Purus semper eget duis at tellus at. In est ante in nibh mauris cursus mattis molestie a.');
-
-INSERT INTO comment (postId, name, email, body)
-VALUES (23, 'Johanna Hall', 'Nisi quis eleifend quam adipiscing vitae proin.');
-INSERT INTO comment (postId, name, email, body)
-VALUES (23, 'Kristine Steele', 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
-INSERT INTO comment (postId, name, email, body)
-VALUES (23, 'Dillon Bates', 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.);
-INSERT INTO comment (postId, name, email, body)
-VALUES (23, 'Elena Bishop', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
-INSERT INTO comment (postId, name, email, body)
-VALUES (23, 'Conor Patton', 'Purus semper eget duis at tellus at. In est ante in nibh mauris cursus mattis molestie a.');
 --- Commentc ---
